@@ -41,10 +41,10 @@ class SessionManager:
         """Get session for a phone number"""
         return self.sessions.get(phone)
     
-    def create_session(self, phone: str, conversation_id: str) -> dict:
+    def create_session(self, phone: str, session_id: str) -> dict:
         """Create new session for a phone number"""
         session = {
-            "conversation_id": conversation_id,
+            "session_id": session_id,
             "handler": "bot",  # or "human"
             "created_at": datetime.now().isoformat(),
             "last_interaction": datetime.now().isoformat(),

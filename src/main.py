@@ -96,11 +96,11 @@ async def webhook_handler(request: Request):
             session = session_manager.get_session(phone)
             
             if not session:
-                # Create new conversation
-                conversation_id = agent.create_conversation()
-                session = session_manager.create_session(phone, conversation_id)
+                # Create new session (openai-agents manages history automatically)
+                session_id = phone  # Use phone as session_id for simplicity
+                session = session_manager.create_session(phone, session_id)
             
-            conversation_id = session["conversation_id"]
+            session_id = session["session_id"]
             
             # Check if bot should handle
             if not session_manager.is_bot_handler(phone):
@@ -109,7 +109,7 @@ async def webhook_handler(request: Request):
             
             # Process with OpenAI Agent
             try:
-                response_text, needs_transfer = agent.run_agent(conversation_id, text)
+                response_text, needs_transfer = await agent.run_agent(session_id, text)
                 
                 # Update session
                 session_manager.increment_message_count(phone)
